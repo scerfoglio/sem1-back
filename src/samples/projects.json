@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Proyecto 1",
+    "investigators": ["Fulano", "Mengano"],
+    "director": "Fulano",
+    "started_at": "2022-01-01T00:00:00Z",
+    "status": "In progress",
+    "fundsLeft": 3245365.00
+  },
+  {
+    "id": 2,
+    "name": "Proyecto 2",
+    "investigators": ["Mengano", "Juanita"],
+    "director": "Juanita",
+    "started_at": "2022-02-01T00:00:00Z",
+    "status": "Canceled",
+    "fundsLeft": 0
+  }
+]
