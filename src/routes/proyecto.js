@@ -6,6 +6,6 @@ const proyectoController = require('../controller/proyectoController')
 // Usuarios
 router.route('/proyecto')
     .post(proyectoController.add)
-  //  .get(usuarioController.list)
+    .get(proyectoController.list)
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const Proyecto = require('../models/proyectoModel')
-const {Mongoose} = require('mongoose')
+
 
 exports.add = function(req,res) {
     let body = req.body
@@ -25,4 +25,10 @@ exports.add = function(req,res) {
             proyecto: proyectoDB
         })
     })
+}
+
+
+exports.list = async function(req,res) {
+    let proyectos = await Proyecto.find();
+    res.json(proyectos)
 }
