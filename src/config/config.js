@@ -23,7 +23,7 @@ if ( process.env.NODE_ENV === 'dev') {
 
 } 
 else {
-    urlDB = 'mongodb+srv://backendEncuestasUser:ItaliaRoma.01!@cluster0.ftjms.mongodb.net/backend_encuestas?retryWrites=true&w=majority'
+    urlDB = 'mongodb+srv://projectadmin-dev:projectadmin-dev@cluster0.rhifb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 }
 process.env.URL_DB = urlDB
 
