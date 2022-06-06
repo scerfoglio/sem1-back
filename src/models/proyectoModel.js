@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 //Definición del esquema
 const proyectoSchema = mongoose.Schema({
-    id:{
+    _id:{
         type: mongoose.Schema.ObjectId,
         ref: 'Proyecto'
     },
@@ -19,6 +19,7 @@ const proyectoSchema = mongoose.Schema({
         type: String,
         required: [true, "Es conveniente dar un descripción a un proyecto"]
     },
+    emailContacto: String,
     fases: [{
         id: mongoose.Schema.ObjectId,
         nombre: String,
@@ -32,7 +33,27 @@ const proyectoSchema = mongoose.Schema({
         id: mongoose.Schema.ObjectId,
         nombre: String,
         apellido: String,
-        email: String
+        email: String,
+        
+    }], 
+    insumos:[{
+        _id: mongoose.Schema.ObjectId,
+        nombre: {
+            type: String,
+            required: [true, "No podés dejar un insumo sin nombre"]
+        },
+        descripción: String,
+        cantidad: {
+            type: Number,
+            requerid: [true, "Es necesario ingresar una cantidad de reactivo"]
+        },
+        unidad: {
+            type: String,
+            requerid: [true, "Tenés que ingesar una unidad para medir la cantidad (Gramos, Kilos, unidades, etc)"]
+        }
+    }],
+    contacto:[{
+        _id: mongoose.Schema.ObjectId
     }]
 
 })
