@@ -13,7 +13,7 @@
 const mongoose = require('mongoose')
 
 //Definición del esquema
-const proyectoSchema = mongoose.Schema({
+const InsumosSchema = mongoose.Schema({
     id:{
         type: mongoose.Schema.ObjectId,
         ref: 'Insumos'
@@ -45,3 +45,6 @@ const proyectoSchema = mongoose.Schema({
         emailContacto: String
     }] 
 })
+
+
+module.exports = mongoose.model('Insumo', InsumosSchema)

@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 //Definición del esquema
 const proyectoSchema = mongoose.Schema({
-    _id:{
+    id:{
         type: mongoose.Schema.ObjectId,
-        ref: 'Proyecto'
+        ref: 'Proyectos'
     },
     nombre: {
         type: String,

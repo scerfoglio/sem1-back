@@ -1,7 +1,9 @@
 const Proyecto = require('../models/proyectoModel')
+const Insumo = require('../models/insumoModel')
 
 
 exports.add = function(req,res) {
+
     let body = req.body
     let proyecto = new Proyecto({
         nombre: body.nombre,
@@ -9,10 +11,15 @@ exports.add = function(req,res) {
         campo_accion: body.campo_accion,
         descripcion: body.descripcion,
         fases: body.fases,
-        usuarios: body.usuarios
+        usuarios: body.usuarios,
+        insumos: body.insumos,
+        emailContacto: body.emailContacto,
+        contacto: body.contacto
     })
-
+    
     proyecto.save((err,proyectoDB) => {
+        let insumosConError = []
+        let insumosRepetidos = []
         if(err) {
             return res.status(400).json({
                 ok: false,
@@ -20,8 +27,28 @@ exports.add = function(req,res) {
             })
         }
 
+        let proyectoDBAux = proyectoDB
+        body.insumos.forEach((insumo) => {
+            let proyectoAux =  {}
+            proyectoAux.nombre = proyectoDBAux.nombre
+            proyectoAux.emailContacto = proyectoDBAux.emailContacto
+            proyectoAux._idContacto = proyectoDBAux._idContacto
+            proyectoAux._id = proyectoDBAux._id
+            Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad}, { $push: {proyectos: proyectoAux }}, {
+                new: true,
+                runValidators: true,
+                context: 'query',
+                upsert: true
+            } , (err, insumoDB) => {        
+                if (err) {
+                    console.log("este es un error",err)
+                    insumosConError.push(insumo.nombre)
+                }
+            })
+        })
+         
         res.json({
-            of:true,
+            ok:true,
             proyecto: proyectoDB
         })
     })
