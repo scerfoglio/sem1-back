@@ -23,9 +23,7 @@ exports.add = function(req,res) {
 
     proyecto.save((err,proyectoDB) => {
         let insumosConError = []
-        let insumosRepetidos = []
         if(err) {
-            console.log("no error")
             return res.status(400).json({
                 ok: false,
                 err: err
@@ -96,6 +94,176 @@ exports.add = function(req,res) {
     })
 }
 
+exports.addInsumo = function(req,res) {
+    let id = req.params.id
+    let body = req.body
+    let insumosConError = []
+
+    Proyecto.findOneAndUpdate({_id: id, "insumos.nombre": body.nombre, "insumos.unidad": body.unidad},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
+        new: true,
+        runValidators: true,
+        context: 'query',
+        upsert: false
+    } , (err, proyectoDB) => {    
+        if(err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            })
+        }
+        if (proyectoDB != null) {
+            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, "proyectos.nombre": proyectoDB.nombre}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
+                new: true,
+                runValidators: true,
+                context: 'query',
+                upsert: false
+            } , (err, insumoDB) => {        
+                if (err) {
+                    console.log(err)
+                    insumosConError.push(insumo.nombre)
+                }
+
+                if (insumoDB === null) {
+
+                    let proyectoAux2 = {}
+                    proyectoAux2.nombre = proyectoDB.nombre
+                    proyectoAux2.emailContacto = proyectoDB.emailContacto
+                    proyectoAux2._idContacto = body.idContacto
+                    proyectoAux2._id = id
+                    proyectoAux2.cantidad = body.cantidad
+        
+                    Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
+                        new: true,
+                        runValidators: true,
+                        context: 'query',
+                        upsert: false
+                    } , (err, insumoDBProyecto) => {
+                        if (err) {
+                            console.log(err)
+                            insumosConError.push(insumo.nombre)
+                        }
+                        if (insumoDBProyecto === null) {
+                            console.log("Generando nuevo insumo")
+                            let nuevoInsumo = new Insumo()
+                            nuevoInsumo.nombre = body.nombre
+                            nuevoInsumo.unidad = body.unidad
+                            nuevoInsumo.proyectos = proyectoAux2
+        
+                            nuevoInsumo.save((err,nuevoInsumoDB) => {
+                                if(err) {
+                                    console.log("Error al generar el insumo", err)
+                                    insumosConError.push(insumo)
+                                }
+                            })
+                            
+                        } 
+                    })
+                }
+            })
+        } 
+        else {
+
+            let insumosAux = {}
+            insumosAux.nombre = body.nombre
+            insumosAux.cantidad = body.cantidad
+            insumosAux.unidad = body.unidad
+
+            Proyecto.findByIdAndUpdate(id,{ $push: {insumos: insumosAux }}, {
+                new: true,
+                runValidators: true,
+                context: 'query',
+                upsert: false
+            } , (err, proyectoDB2) => {
+                if(err) {
+                    return res.status(400).json({
+                        ok: false,
+                        err: err
+                    })
+                }
+                let proyectoAux2 = {}
+                proyectoAux2.nombre = proyectoDB2.nombre
+                proyectoAux2.emailContacto = proyectoDB2.emailContacto
+                proyectoAux2._idContacto = body.idContacto
+                proyectoAux2._id = id
+                proyectoAux2.cantidad = body.cantidad
+    
+                Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
+                    new: true,
+                    runValidators: true,
+                    context: 'query',
+                    upsert: false
+                } , (err, insumoDBProyecto) => {
+                    if (err) {
+                        console.log(err)
+                        insumosConError.push(insumo.nombre)
+                    }
+                    if (insumoDBProyecto === null) {
+                        console.log("Generando nuevo insumo")
+                        let nuevoInsumo = new Insumo()
+                        nuevoInsumo.nombre = insumo.nombre
+                        nuevoInsumo.unidad = insumo.unidad
+                        nuevoInsumo.proyectos = proyectoAux2
+    
+                        nuevoInsumo.save((err,nuevoInsumoDB) => {
+                            if(err) {
+                                console.log("Error al generar el insumo", err)
+                                insumosConError.push(insumo)
+                            }
+                        })
+                        
+                    } 
+                    return res.json({
+                        ok: true,
+                        proyecto: proyectoDB
+                    })   
+                   
+                })
+                return res.json({
+                    ok: true,
+                    proyecto: proyectoPushDB
+                })
+
+            })
+           
+        }
+        return res.json({
+            ok: true,
+            proyecto: proyectoDB
+        })
+    })
+}
+
+
+
+exports.getOne = function(req,res) {
+    const id = req.params.id
+    console.log(id)
+    Proyecto.findById(id,(err,proyectoDB) => {
+        if (err) {
+            return (
+                res.status(400).json({
+                    ok: false,
+                    err: err
+                })
+
+            )
+        }
+
+        if (!proyectoDB) {
+            return (
+                res.status(404).json({
+                    ok: false,
+                    err: "No se encontró el proyecto buscado"
+                })
+            )
+        }
+
+        res.json({
+            ok: true,
+            proyecto: proyectoDB
+        })
+    })
+}
 
 exports.list = async function(req,res) {
     const normalFilterFields = ['area', 'campo_accion'];
