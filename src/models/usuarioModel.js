@@ -18,6 +18,7 @@ const usuarioSchema = mongoose.Schema({
         type: String,
         required: [true, "Tenés que ingresar un email válido"]
     },
+    celular: String,
     fecha_creacion: {
         type: Date,
         default: Date.now

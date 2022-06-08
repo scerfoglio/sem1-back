@@ -7,7 +7,9 @@ exports.add = function (req,res) {
         nombre: body.nombre,
         apellido: body.apellido,
         email: body.email,
-        password: body.password
+        password: body.password,
+        proyectos: body.proyectos
+        
     }); 
 
     usuario.save( (err, usuarioDB) => {
