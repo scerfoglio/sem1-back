@@ -22,6 +22,14 @@ const proyectoSchema = mongoose.Schema({
         required: [true, "Es conveniente dar un descripción a un proyecto"]
     },
     emailContacto: String,
+    fecha_inicio: {
+        type: Date,
+        required: [true, "Es necesario ingresar una fecha de inicio al proyecto"]
+
+    },
+    fecha_fin: Date,
+    presupuesto_asignado: Number,
+    presupuesto_utilizado: Number,
     fases: [{
         id: mongoose.Schema.ObjectId,
         nombre: String,
