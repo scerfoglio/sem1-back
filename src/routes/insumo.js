@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const insumosController = require('../controller/insumosController')
+const insumosController = require('../controller/insumoController')
 
 
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 //Definición del esquema
 const proyectoSchema = mongoose.Schema({
@@ -9,6 +10,7 @@ const proyectoSchema = mongoose.Schema({
     nombre: {
         type: String,
         required: [true, "No podés dejar un proyecto sin nombre"]
+        //,unique: true
     },
     area: {
         type: String,
@@ -56,6 +58,11 @@ const proyectoSchema = mongoose.Schema({
         _id: mongoose.Schema.ObjectId
     }]
 
+})
+
+//La documentación pide esto para poder manejar los mensajes de una forma más amigable
+proyectoSchema.plugin(uniqueValidator, {
+    message: '{PATH} del proyecto debe de ser único'
 })
 
 module.exports = mongoose.model('Proyecto', proyectoSchema)
