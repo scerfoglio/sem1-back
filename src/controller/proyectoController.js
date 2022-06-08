@@ -1,5 +1,6 @@
 const Proyecto = require('../models/proyectoModel')
 const Insumo = require('../models/insumoModel')
+const { json } = require('express/lib/response')
 
 
 exports.add = function(req,res) {
@@ -68,6 +69,13 @@ exports.add = function(req,res) {
                         console.log("insumoDBProyecto", insumoDBProyecto)
                         if (insumoDBProyecto === null) {
                             console.log("Generando nuevo insumo")
+                            
+                            
+                            // let insumoGenerado = crearInsumo(insumo,proyectoAux2)
+                            // if (insumoGenerado.err === '') {
+                            //     insumosConError.push(insumo)
+                            // }
+                            
                             let nuevoInsumo = new Insumo()
                             nuevoInsumo.nombre = insumo.nombre
                             nuevoInsumo.unidad = insumo.unidad
@@ -93,6 +101,28 @@ exports.add = function(req,res) {
         })
     })
 }
+
+function crearInsumo(insumo, proyecto) {
+    let respuesta = {}
+    let nuevoInsumo = new Insumo()
+    nuevoInsumo.nombre = insumo.nombre
+    nuevoInsumo.unidad = insumo.unidad
+    nuevoInsumo.proyectos = proyecto
+
+    nuevoInsumo.save((err,nuevoInsumoDB) => {
+        if(err) {
+            respuesta.err = err
+            respuesta.ok = ''
+            return respuesta
+            
+        }
+    })
+    respuesta.err = ''
+    respuesta.ok = nuevoInsumo
+    return respuesta
+}
+
+
 
 exports.addInsumo = function(req,res) {
     let id = req.params.id
@@ -144,7 +174,18 @@ exports.addInsumo = function(req,res) {
                         }
                         if (insumoDBProyecto === null) {
                             console.log("Generando nuevo insumo")
-                            let nuevoInsumo = new Insumo()
+                            
+                            // let nuevoInsumo = {}
+                            // nuevoInsumo.nombre = body.nombre
+                            // nuevoInsumo.unidad = body.unidad
+                            // console.log("Verificando CAntidad", proyectoAux2.cantidad)
+                            // let insumoGenerado = crearInsumo(nuevoInsumo,proyectoAux2)
+                            // if (insumoGenerado.err === '') {
+                            //     insumosConError.push(nuevoInsumo)
+                            // }
+                            
+                            
+                           let nuevoInsumo = new Insumo()
                             nuevoInsumo.nombre = body.nombre
                             nuevoInsumo.unidad = body.unidad
                             nuevoInsumo.proyectos = proyectoAux2
@@ -180,6 +221,7 @@ exports.addInsumo = function(req,res) {
                         err: err
                     })
                 }
+
                 let proyectoAux2 = {}
                 proyectoAux2.nombre = proyectoDB2.nombre
                 proyectoAux2.emailContacto = proyectoDB2.emailContacto
@@ -220,7 +262,7 @@ exports.addInsumo = function(req,res) {
                 })
                 return res.json({
                     ok: true,
-                    proyecto: proyectoPushDB
+                    proyecto: proyectoDB2
                 })
 
             })
