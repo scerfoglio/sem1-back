@@ -70,6 +70,7 @@ exports.add = function(req,res) {
                         if (insumoDBProyecto === null) {
                             console.log("Generando nuevo insumo")
                             
+
                             
                             // let insumoGenerado = crearInsumo(insumo,proyectoAux2)
                             // if (insumoGenerado.err === '') {
@@ -102,25 +103,25 @@ exports.add = function(req,res) {
     })
 }
 
-function crearInsumo(insumo, proyecto) {
-    let respuesta = {}
-    let nuevoInsumo = new Insumo()
-    nuevoInsumo.nombre = insumo.nombre
-    nuevoInsumo.unidad = insumo.unidad
-    nuevoInsumo.proyectos = proyecto
+// const crearInsumo = (insumo, proyecto) => {
+//     let respuesta = {}
+//     let nuevoInsumo = new Insumo()
+//     nuevoInsumo.nombre = insumo.nombre
+//     nuevoInsumo.unidad = insumo.unidad
+//     nuevoInsumo.proyectos = proyecto
 
-    nuevoInsumo.save((err,nuevoInsumoDB) => {
-        if(err) {
-            respuesta.err = err
-            respuesta.ok = ''
-            return respuesta
+//     nuevoInsumo.save((err,nuevoInsumoDB) => {
+//         if(err) {
+//             respuesta.err = err
+//             respuesta.ok = ''
+//             return respuesta
             
-        }
-    })
-    respuesta.err = ''
-    respuesta.ok = nuevoInsumo
-    return respuesta
-}
+//         }
+//     })
+//     respuesta.err = ''
+//     respuesta.ok = nuevoInsumo
+//     return respuesta
+// }
 
 
 
