@@ -1,6 +1,8 @@
 const Proyecto = require('../models/proyectoModel')
 const Insumo = require('../models/insumoModel')
 const { json } = require('express/lib/response')
+const { Mongoose } = require('mongoose')
+const ObjectoId = require('mongoose');
 
 
 exports.add = function(req,res) {
@@ -122,6 +124,69 @@ exports.add = function(req,res) {
 //     respuesta.ok = nuevoInsumo
 //     return respuesta
 // }
+
+exports.updateUsuario = function(req,res) {
+    let id = req.params.id
+    let idUsuario = req.params.idUsuario
+    let body = req.body
+    let Usuario = {}
+
+    Usuario._idUsuario = idUsuario
+    Usuario.nombre = body.nombre 
+    Usuario.apellido = body.apellido
+    Usuario.email = body.email
+    
+    Proyecto.findOneAndUpdate({_id: id, "usuarios.idUsuario": idUsuario},{ $set: {"usuarios.$.nombre": body.nombre, "usuarios.$.apellido": body.apellido, "usuarios.$.email": body.email }}, {
+        new: true,
+        runValidators: true,
+        context: 'query',
+        upsert: false
+        
+    }, (err,proyectoDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            })
+        }
+        return res.json({
+            ok: true,
+            proyecto: proyectoDB
+        })
+    })
+}
+
+exports.addUsuario = function(req,res)  {
+    let id = req.params.id
+    let idUsuario = req.params.idUsuario
+    let body = req.body
+    let Usuario = {}
+ 
+    Usuario._id = new ObjectoId.Types.ObjectId(idUsuario)
+    Usuario.nombre = body.nombre 
+    Usuario.apellido = body.apellido
+    Usuario.email = body.email
+
+    Proyecto.findByIdAndUpdate({_id: id},{ $addToSet: {usuarios: Usuario} }, {
+        new: true,
+        runValidators: true,
+        context: 'query',
+        upsert: false
+        
+    }, (err,proyectoDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err: err
+            })
+        }
+        return res.json({
+            ok: true,
+            proyecto: proyectoDB
+        })
+    })
+    
+}
 
 
 
