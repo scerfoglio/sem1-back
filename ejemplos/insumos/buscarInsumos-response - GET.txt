@@ -1,0 +1,286 @@
+{
+    "ok": true,
+    "insumos": [
+        {
+            "_id": "62a55a58d981f8dad68ee82f",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a55a58d981f8dad68ee824",
+                    "nombre": "proyecto 5",
+                    "cantidad": 3610,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                },
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 10,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "Prensadora",
+            "unidad": "Unidades",
+            "__v": 0
+        },
+        {
+            "_id": "62a55a58d981f8dad68ee831",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a55a58d981f8dad68ee824",
+                    "nombre": "proyecto 5",
+                    "cantidad": 105,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                },
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 5,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "Alcohol etílico",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a60549d5848d4de028859b",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a55a58d981f8dad68ee824",
+                    "nombre": "proyecto 5",
+                    "cantidad": 15,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                },
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 14,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "Máquina compresora",
+            "unidad": "Unidades",
+            "__v": 0
+        },
+        {
+            "_id": "62a60f0fa6260c3ce3d3f379",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a55a58d981f8dad68ee824",
+                    "nombre": "proyecto 5",
+                    "cantidad": 500,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                },
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "Lavandina",
+                    "cantidad": 100
+                },
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 500,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "Lavandina",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a615cc87f057db36f7a8e7",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "Vinagre",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a6162b206302ab529bcbdc",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "Sal",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a616754561d3587e8b4ea7",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "H20",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a616c64561d3587e8b4eac",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "H20oo",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a618cd4b452afe4efd25d1",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 200,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "H20ooo",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61936ee6e80cb39776f81",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 400,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "prueba",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61a41f846724d434c8807",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "prueabaqaa",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61a6f259185421f33f81c",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "prueabaaqaa",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61b8c53c52b62a8c0cf73",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "prueabaaaaqaa",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61ba2fc0ca251397450bd",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 300,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "qqqq",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61c63c98dcc5aa787cfda",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                },
+                {
+                    "_id": "62a55a58d981f8dad68ee824",
+                    "nombre": "proyecto 5",
+                    "cantidad": 200,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "qqqaaq",
+            "unidad": "L",
+            "__v": 0
+        },
+        {
+            "_id": "62a61dac9ea24b06402c3ec3",
+            "contacto": [],
+            "proyectos": [
+                {
+                    "_id": "62a55a58d981f8dad68ee824",
+                    "nombre": "proyecto 5",
+                    "cantidad": 100,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                },
+                {
+                    "_id": "62a6056fd5848d4de02885a3",
+                    "nombre": "proyecto 6",
+                    "cantidad": 500,
+                    "emailContacto": "cristian.merenda@gmail.com"
+                }
+            ],
+            "nombre": "bbb",
+            "unidad": "L",
+            "__v": 0
+        }
+    ]
+}

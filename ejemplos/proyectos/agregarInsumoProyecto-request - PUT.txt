@@ -1,0 +1,13 @@
+URL:
+http://localhost:3000/api/proyecto/[id de proyecto - "_id"]/insumo
+
+
+BODY
+
+{
+    "nombre": "H20 gaseoso", 
+    "unidad": "L",
+    "cantidad": 450,
+    "idContacto": "629f89cccd59b49ebb89a0ce"
+
+}

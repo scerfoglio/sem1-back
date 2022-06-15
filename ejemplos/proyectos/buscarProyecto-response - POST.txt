@@ -1,0 +1,115 @@
+[
+    {
+        "_id": "62a2e60da545443c1e212499",
+        "nombre": "proyecto 4",
+        "area": "area X",
+        "campo_accion": "Tecnología",
+        "descripcion": "Proyecto nuevo de tecnología",
+        "emailContacto": "cristian.merenda@gmail.com",
+        "fecha_inicio": "2022-01-01T03:00:00.000Z",
+        "fecha_fin": "2022-12-31T03:00:00.000Z",
+        "presupuesto_asignado": 50000,
+        "presupuesto_utilizado": 1000,
+        "fases": [
+            {
+                "nombre": "fase 1",
+                "descripcion": "Descripcion de la fase 1",
+                "fecha_inicio": "2022-01-01T03:00:00.000Z",
+                "fecha_fin": "2022-12-31T03:00:00.000Z",
+                "presupuesto_asignado": 50000000,
+                "presupuesto_utilizado": 15000,
+                "_id": "62a2e60da545443c1e21249a"
+            },
+            {
+                "nombre": "fase 2",
+                "descripcion": "Descripcion de la fase 2",
+                "fecha_inicio": "2022-01-01T03:00:00.000Z",
+                "fecha_fin": "2023-05-31T03:00:00.000Z",
+                "presupuesto_asignado": 1000,
+                "presupuesto_utilizado": 2,
+                "_id": "62a2e60da545443c1e21249b"
+            }
+        ],
+        "usuarios": [
+            {
+                "_id": "62a2d0c6bcb8c9e4ce46716f",
+                "nombre": "Clara"
+            },
+            {
+                "_id": "62a2d0c6bcb8c9e4ce46716f",
+                "nombre": "Clara",
+                "apellido": "Merenda",
+                "email": "cristian.merenda@gmail.com.ar"
+            }
+        ],
+        "insumos": [
+            {
+                "nombre": "Alcohol etílico",
+                "cantidad": 5,
+                "unidad": "L"
+            },
+            {
+                "nombre": "Prensadora",
+                "cantidad": 10,
+                "unidad": "Unidades"
+            }
+        ],
+        "contacto": [
+            {
+                "_id": "628087841c1e7e150d096dc3"
+            }
+        ],
+        "__v": 0
+    },
+    {
+        "_id": "62a4f9f70d666824503a85d8",
+        "nombre": "proyecto 5",
+        "area": "area X",
+        "campo_accion": "Tecnología",
+        "descripcion": "Proyecto nuevo de tecnología",
+        "emailContacto": "cristian.merenda@gmail.com",
+        "fecha_inicio": "2022-01-01T03:00:00.000Z",
+        "fecha_fin": "2022-12-31T03:00:00.000Z",
+        "presupuesto_asignado": 50000,
+        "presupuesto_utilizado": 1000,
+        "fases": [
+            {
+                "nombre": "fase 1",
+                "descripcion": "Descripcion de la fase 1",
+                "fecha_inicio": "2022-01-01T03:00:00.000Z",
+                "fecha_fin": "2022-12-31T03:00:00.000Z",
+                "presupuesto_asignado": 50000000,
+                "presupuesto_utilizado": 15000,
+                "_id": "62a4f9f70d666824503a85d9"
+            },
+            {
+                "nombre": "fase 2",
+                "descripcion": "Descripcion de la fase 2",
+                "fecha_inicio": "2022-01-01T03:00:00.000Z",
+                "fecha_fin": "2023-05-31T03:00:00.000Z",
+                "presupuesto_asignado": 1000,
+                "presupuesto_utilizado": 2,
+                "_id": "62a4f9f70d666824503a85da"
+            }
+        ],
+        "usuarios": [],
+        "insumos": [
+            {
+                "nombre": "Alcohol etílico",
+                "cantidad": 5,
+                "unidad": "L"
+            },
+            {
+                "nombre": "Prensadora",
+                "cantidad": 10,
+                "unidad": "Unidades"
+            }
+        ],
+        "contacto": [
+            {
+                "_id": "628087841c1e7e150d096dc3"
+            }
+        ],
+        "__v": 0
+    }
+]

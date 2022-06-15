@@ -29,6 +29,7 @@ exports.add = function(req,res) {
         if(err) {
             return res.status(400).json({
                 ok: false,
+                message: err.message,
                 err: err
             })
         }
@@ -42,7 +43,6 @@ exports.add = function(req,res) {
                 upsert: false
             } , (err, insumoDB) => {        
                 if (err) {
-                    console.log(err)
                     insumosConError.push(insumo.nombre)
                 }
 
@@ -135,8 +135,7 @@ exports.updateUsuario = function(req,res) {
     Usuario.nombre = body.nombre 
     Usuario.apellido = body.apellido
     Usuario.email = body.email
-    
-    Proyecto.findOneAndUpdate({_id: id, "usuarios.idUsuario": idUsuario},{ $set: {"usuarios.$.nombre": body.nombre, "usuarios.$.apellido": body.apellido, "usuarios.$.email": body.email }}, {
+    Proyecto.findOneAndUpdate({_id: id, usuarios: {$elemMatch: {idUsuario: idUsuario}}},{ $set: {"usuarios.$.nombre": body.nombre, "usuarios.$.apellido": body.apellido, "usuarios.$.email": body.email }}, {
         new: true,
         runValidators: true,
         context: 'query',
@@ -146,6 +145,7 @@ exports.updateUsuario = function(req,res) {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: err.message,
                 err: err
             })
         }
@@ -158,8 +158,8 @@ exports.updateUsuario = function(req,res) {
 
 exports.addUsuario = function(req,res)  {
     let id = req.params.id
-    let idUsuario = req.params.idUsuario
     let body = req.body
+    let idUsuario = req.body.idUsuario
     let Usuario = {}
  
     Usuario._id = new ObjectoId.Types.ObjectId(idUsuario)
@@ -177,6 +177,7 @@ exports.addUsuario = function(req,res)  {
         if (err) {
             return res.status(400).json({
                 ok: false,
+                message: err.message,
                 err: err
             })
         }
@@ -194,21 +195,26 @@ exports.addInsumo = function(req,res) {
     let id = req.params.id
     let body = req.body
     let insumosConError = []
-
-    Proyecto.findOneAndUpdate({_id: id, "insumos.nombre": body.nombre, "insumos.unidad": body.unidad},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
+    let proyectoDB1
+    let proyectoDB2
+    let proyectoDB3
+    Proyecto.findOneAndUpdate({_id: id, insumos: { $elemMatch:  {unidad: body.unidad, nombre: body.nombre }}},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
         new: true,
         runValidators: true,
         context: 'query',
         upsert: false
-    } , (err, proyectoDB) => {    
+    } , (err, proyectoDB) => {   
+        proyectoDB2 = proyectoDB 
         if(err) {
             return res.status(400).json({
                 ok: false,
+                message: err.message,
                 err: err
             })
         }
         if (proyectoDB != null) {
-            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, "proyectos.nombre": proyectoDB.nombre}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
+            proyectoDB1 = proyectoDB
+            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
                 new: true,
                 runValidators: true,
                 context: 'query',
@@ -218,9 +224,7 @@ exports.addInsumo = function(req,res) {
                     console.log(err)
                     insumosConError.push(insumo.nombre)
                 }
-
                 if (insumoDB === null) {
-
                     let proyectoAux2 = {}
                     proyectoAux2.nombre = proyectoDB.nombre
                     proyectoAux2.emailContacto = proyectoDB.emailContacto
@@ -238,20 +242,9 @@ exports.addInsumo = function(req,res) {
                             console.log(err)
                             insumosConError.push(insumo.nombre)
                         }
-                        if (insumoDBProyecto === null) {
-                            console.log("Generando nuevo insumo")
-                            
-                            // let nuevoInsumo = {}
-                            // nuevoInsumo.nombre = body.nombre
-                            // nuevoInsumo.unidad = body.unidad
-                            // console.log("Verificando CAntidad", proyectoAux2.cantidad)
-                            // let insumoGenerado = crearInsumo(nuevoInsumo,proyectoAux2)
-                            // if (insumoGenerado.err === '') {
-                            //     insumosConError.push(nuevoInsumo)
-                            // }
-                            
-                            
-                           let nuevoInsumo = new Insumo()
+
+                        if (insumoDBProyecto === null) {                   
+                            let nuevoInsumo = new Insumo()
                             nuevoInsumo.nombre = body.nombre
                             nuevoInsumo.unidad = body.unidad
                             nuevoInsumo.proyectos = proyectoAux2
@@ -263,9 +256,17 @@ exports.addInsumo = function(req,res) {
                                 }
                             })
                             
-                        } 
+                        }
+                        return res.json({
+                            ok: true,
+                            proyecto: proyectoDB1
+                        })   
                     })
                 }
+                return res.json({
+                    ok: true,
+                    proyecto: proyectoDB1
+                }) 
             })
         } 
         else {
@@ -280,22 +281,23 @@ exports.addInsumo = function(req,res) {
                 runValidators: true,
                 context: 'query',
                 upsert: false
-            } , (err, proyectoDB2) => {
+            } , (err, proyectoDB) => {
+                proyectoDB1 = proyectoDB
                 if(err) {
                     return res.status(400).json({
                         ok: false,
+                        message: err.message,
                         err: err
                     })
                 }
-
                 let proyectoAux2 = {}
-                proyectoAux2.nombre = proyectoDB2.nombre
-                proyectoAux2.emailContacto = proyectoDB2.emailContacto
-                proyectoAux2._idContacto = body.idContacto
+                proyectoAux2.nombre = proyectoDB.nombre
+                proyectoAux2.emailContacto = proyectoDB.emailContacto
+                //proyectoAux2._idContacto = proyectoDB.contacto.idContacto
                 proyectoAux2._id = id
                 proyectoAux2.cantidad = body.cantidad
     
-                Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
+                 Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
                     new: true,
                     runValidators: true,
                     context: 'query',
@@ -306,38 +308,26 @@ exports.addInsumo = function(req,res) {
                         insumosConError.push(insumo.nombre)
                     }
                     if (insumoDBProyecto === null) {
-                        console.log("Generando nuevo insumo")
                         let nuevoInsumo = new Insumo()
-                        nuevoInsumo.nombre = insumo.nombre
-                        nuevoInsumo.unidad = insumo.unidad
+                        nuevoInsumo.nombre = body.nombre
+                        nuevoInsumo.unidad = body.unidad
                         nuevoInsumo.proyectos = proyectoAux2
     
                         nuevoInsumo.save((err,nuevoInsumoDB) => {
                             if(err) {
-                                console.log("Error al generar el insumo", err)
                                 insumosConError.push(insumo)
                             }
-                        })
-                        
+                        })                        
                     } 
                     return res.json({
                         ok: true,
-                        proyecto: proyectoDB
+                        proyecto: proyectoDB1
                     })   
                    
                 })
-                return res.json({
-                    ok: true,
-                    proyecto: proyectoDB2
-                })
-
             })
            
         }
-        return res.json({
-            ok: true,
-            proyecto: proyectoDB
-        })
     })
 }
 
@@ -351,6 +341,7 @@ exports.getOne = function(req,res) {
             return (
                 res.status(400).json({
                     ok: false,
+                    message: err.message,
                     err: err
                 })
 

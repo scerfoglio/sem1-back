@@ -1,0 +1,7 @@
+Se compone la URL de la siguiente estructura
+
+http://localhost:3030/api/proyecto?nombre=proyecto&descripcion=nueva
+
+nombre = No compara por mayúsculas
+descripción = Cualquier expresión regular que lo contemple
+
