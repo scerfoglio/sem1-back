@@ -17,9 +17,6 @@ router.route('/proyecto/:id/insumo')
     
 router.route('/proyecto/:id')
     .get(proyectoController.getOne)
-    //.put(encuestaController.update)
-    //.delete(encuestaController.delete)
-
 
 router.route('/proyecto')
     .post(proyectoController.add)
