@@ -1,0 +1,11 @@
+http://localhost:3000/api/proyecto/[id de proyecto]/usuario
+
+
+Mandar todos los datos (No encontré la forma de validar el request, en un elemento dentro de un array)
+
+{
+    "idUsuario": "62a2d0c6bcb8c9e4ce46716f",
+    "nombre": "Cristian",
+    "apellido": "Merenda",
+    "email": "cristian.merenda@gmail.com.ar"
+}

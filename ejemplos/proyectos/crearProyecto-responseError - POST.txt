@@ -1,0 +1,24 @@
+{
+    "ok": false,
+    "message": "nombre del proyecto debe de ser único",
+    "err": {
+        "errors": {
+            "nombre": {
+                "name": "ValidatorError",
+                "message": "nombre del proyecto debe de ser único",
+                "properties": {
+                    "message": "nombre del proyecto debe de ser único",
+                    "type": "unique",
+                    "path": "nombre",
+                    "value": "proyecto 5"
+                },
+                "kind": "unique",
+                "path": "nombre",
+                "value": "proyecto 5"
+            }
+        },
+        "_message": "Proyecto validation failed",
+        "name": "ValidationError",
+        "message": "Proyecto validation failed: nombre: nombre del proyecto debe de ser único"
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "nombre": "proyecto 4", 
+    "area": "area X",
+    "campo_accion": "Tecnología", 
+    "descripcion": "Proyecto nuevo de tecnología",
+    "emailContacto": "cristian.merenda@gmail.com",
+    "fecha_inicio": "2022/01/01",
+    "fecha_fin": "2022/12/31",
+    "presupuesto_asignado": 50000,
+    "presupuesto_utilizado": 1000,
+    "fases": [
+        {
+            "nombre": "fase 1",
+            "descripcion": "Descripcion de la fase 1",
+            "fecha_inicio": "2022/01/01",
+            "fecha_fin": "2022/12/31",
+            "presupuesto_asignado": 50000000,
+            "presupuesto_utilizado": 15000
+        },
+         {
+            "nombre": "fase 2",
+            "descripcion": "Descripcion de la fase 2",
+            "fecha_inicio": "2022/01/01",
+            "fecha_fin": "2023/05/31",
+            "presupuesto_asignado": 1000,
+            "presupuesto_utilizado": 2
+        }
+    ],
+    "usuarios": [
+        {
+            "_id": "62a2d0c6bcb8c9e4ce46716f",
+            "nombre": "Juan Cruz",
+            "apellido": "Garcia",
+            "email": "unmail@mail.com"
+        }
+    ],
+    "insumos": [{
+        "nombre": "Alcohol etílico",
+        "descripcion": "Graduación del 99%",
+        "cantidad": 5,
+        "unidad": "L"
+    },
+    {
+        "nombre": "Prensadora",
+        "descripcion": "Máquina para prensar",
+        "cantidad": 10,
+        "unidad": "Unidades"
+    }],
+    "contacto": [{
+        "_id": "628087841c1e7e150d096dc3"
+    }]
+}

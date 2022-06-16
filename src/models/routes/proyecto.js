@@ -7,7 +7,7 @@ const proyectoController = require('../controller/proyectoController')
 
 
 router.route('/proyecto/:id/usuario/:idUsuario')
-    .patch(proyectoController.updateUsuario)
+    .put(proyectoController.updateUsuario)
 
     router.route('/proyecto/:id/usuario')
     .post(proyectoController.addUsuario)

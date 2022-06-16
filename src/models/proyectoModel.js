@@ -10,7 +10,7 @@ const proyectoSchema = mongoose.Schema({
     nombre: {
         type: String,
         required: [true, "No podés dejar un proyecto sin nombre"]
-        //,unique: true
+        ,unique: true
     },
     area: {
         type: String,
@@ -40,7 +40,10 @@ const proyectoSchema = mongoose.Schema({
         presupuesto_utilizado: Number
     }], 
     usuarios: [{
-        id: mongoose.Schema.ObjectId,
+        _id: {
+            type: mongoose.Schema.ObjectId,
+            refPath: "Usuarios"
+        },
         nombre: String,
         apellido: String,
         email: String,
@@ -63,7 +66,9 @@ const proyectoSchema = mongoose.Schema({
         }
     }],
     contacto:[{
-        _id: mongoose.Schema.ObjectId
+        idContacto: {
+            type: mongoose.Schema.ObjectId,
+        }
     }]
 
 })

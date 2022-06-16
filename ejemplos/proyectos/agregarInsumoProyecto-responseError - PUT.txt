@@ -1,0 +1,26 @@
+Se devuelve un código HTTP distinto a 200
+
+{
+    "ok": false,
+    "message": "Mensaje del error",
+    "err": {
+        "errors": {
+            "nombre": {
+                "name": "ValidatorError",
+                "message": "mensaje del error",
+                "properties": {
+                    "message": "mensaje del error",
+                    "type": "unique",
+                    "path": "nombre",
+                    "value": "proyecto 5"
+                },
+                "kind": "unique",
+                "path": "nombre",
+                "value": "proyecto 5"
+            }
+        },
+        "_message": "Proyecto validation failed",
+        "name": "ValidationError",
+        "message": "Proyecto validation failed: nombre: mensaje del error"
+    }
+}
