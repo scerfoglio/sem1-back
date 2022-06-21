@@ -198,7 +198,8 @@ exports.addInsumo = function(req,res) {
     let proyectoDB1
     let proyectoDB2
     let proyectoDB3
-    Proyecto.findOneAndUpdate({_id: id, insumos: { $elemMatch:  {unidad: body.unidad, nombre: body.nombre }}},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
+    console.log(body);
+    Proyecto.findOneAndUpdate({_id: id, insumos: { $elemMatch:  {unidad: body.unidad, nombre: body.nombre, contacto: [body.idContacto] }}},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
         new: true,
         runValidators: true,
         context: 'query',
@@ -214,7 +215,7 @@ exports.addInsumo = function(req,res) {
         }
         if (proyectoDB != null) {
             proyectoDB1 = proyectoDB
-            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
+            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, contacto: [idContacto], proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
                 new: true,
                 runValidators: true,
                 context: 'query',
@@ -232,7 +233,7 @@ exports.addInsumo = function(req,res) {
                     proyectoAux2._id = id
                     proyectoAux2.cantidad = body.cantidad
         
-                    Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
+                    Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, contacto: [idContacto]}, { $push: {proyectos: proyectoAux2 }}, {
                         new: true,
                         runValidators: true,
                         context: 'query',
@@ -247,6 +248,7 @@ exports.addInsumo = function(req,res) {
                             let nuevoInsumo = new Insumo()
                             nuevoInsumo.nombre = body.nombre
                             nuevoInsumo.unidad = body.unidad
+                            nuevoInsumo.contacto = [body.contacto]
                             nuevoInsumo.proyectos = proyectoAux2
         
                             nuevoInsumo.save((err,nuevoInsumoDB) => {
@@ -275,6 +277,7 @@ exports.addInsumo = function(req,res) {
             insumosAux.nombre = body.nombre
             insumosAux.cantidad = body.cantidad
             insumosAux.unidad = body.unidad
+            insumosAux.contacto = [body.contacto]
 
             Proyecto.findByIdAndUpdate(id,{ $push: {insumos: insumosAux }}, {
                 new: true,
@@ -297,7 +300,7 @@ exports.addInsumo = function(req,res) {
                 proyectoAux2._id = id
                 proyectoAux2.cantidad = body.cantidad
     
-                 Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
+                 Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, contacto: [body.idContacto]}, { $push: {proyectos: proyectoAux2 }}, {
                     new: true,
                     runValidators: true,
                     context: 'query',
@@ -311,6 +314,7 @@ exports.addInsumo = function(req,res) {
                         let nuevoInsumo = new Insumo()
                         nuevoInsumo.nombre = body.nombre
                         nuevoInsumo.unidad = body.unidad
+                        nuevoInsumo.contacto = [body.contacto]
                         nuevoInsumo.proyectos = proyectoAux2
     
                         nuevoInsumo.save((err,nuevoInsumoDB) => {
