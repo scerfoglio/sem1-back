@@ -1,5 +1,6 @@
 const Proyecto = require('../models/proyectoModel')
 const Insumo = require('../models/insumoModel')
+const Usuario = require('../models/usuarioModel')
 const { json } = require('express/lib/response')
 const { Mongoose } = require('mongoose')
 const ObjectoId = require('mongoose');
@@ -191,20 +192,34 @@ exports.addUsuario = function(req,res)  {
 
 
 
-exports.addInsumo = function(req,res) {
+exports.addInsumo = async function(req,res) {
     let id = req.params.id
     let body = req.body
     let insumosConError = []
     let proyectoDB1
     let proyectoDB2
     let proyectoDB3
-    console.log(body);
-    Proyecto.findOneAndUpdate({_id: id, insumos: { $elemMatch:  {unidad: body.unidad, nombre: body.nombre, contacto: [body.idContacto] }}},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
+    let contactoDelInsumo = null;
+    console.log(`body.idContacto: ${body.idContacto}`);
+    if (!!body.idContacto) {
+        contactoDelInsumo = await Usuario.findOne({email: body.idContacto}).then(function (obj, err) {
+            if (err) {
+                console.log("Algo se rompió: ", err);
+            }
+            console.log("Objeto: ", obj);
+            return obj;
+        });
+        console.log("La ejecución de la query devolvió: ", contactoDelInsumo);
+        contactoDelInsumo = !!contactoDelInsumo ? contactoDelInsumo._id : null;
+        console.log("Quedó en la variable: ", contactoDelInsumo);
+    }
+    console.log("contactoDelInsumo: ", contactoDelInsumo);
+    Proyecto.findOneAndUpdate({_id: id, insumos: { $elemMatch:  {unidad: body.unidad, nombre: body.nombre }}},{ $inc: {"insumos.$.cantidad": body.cantidad }}, {
         new: true,
         runValidators: true,
         context: 'query',
         upsert: false
-    } , (err, proyectoDB) => {   
+    } , async (err, proyectoDB) => {
         proyectoDB2 = proyectoDB 
         if(err) {
             return res.status(400).json({
@@ -215,12 +230,12 @@ exports.addInsumo = function(req,res) {
         }
         if (proyectoDB != null) {
             proyectoDB1 = proyectoDB
-            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, contacto: [idContacto], proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
+            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }, $push: { contacto: contactoDelInsumo }}, {
                 new: true,
                 runValidators: true,
                 context: 'query',
                 upsert: false
-            } , (err, insumoDB) => {        
+            } , async (err, insumoDB) => {
                 if (err) {
                     console.log(err)
                     insumosConError.push(insumo.nombre)
@@ -229,16 +244,18 @@ exports.addInsumo = function(req,res) {
                     let proyectoAux2 = {}
                     proyectoAux2.nombre = proyectoDB.nombre
                     proyectoAux2.emailContacto = proyectoDB.emailContacto
-                    proyectoAux2._idContacto = body.idContacto
+                    proyectoAux2._idContacto = contactoDelInsumo
                     proyectoAux2._id = id
                     proyectoAux2.cantidad = body.cantidad
+
+                    console.log("Proyecto aux 2: ", proyectoAux2);
         
-                    Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, contacto: [idContacto]}, { $push: {proyectos: proyectoAux2 }}, {
+                    Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: { proyectos: proyectoAux2, contacto: contactoDelInsumo }}, {
                         new: true,
                         runValidators: true,
                         context: 'query',
                         upsert: false
-                    } , (err, insumoDBProyecto) => {
+                    } , async (err, insumoDBProyecto) => {
                         if (err) {
                             console.log(err)
                             insumosConError.push(insumo.nombre)
@@ -248,10 +265,10 @@ exports.addInsumo = function(req,res) {
                             let nuevoInsumo = new Insumo()
                             nuevoInsumo.nombre = body.nombre
                             nuevoInsumo.unidad = body.unidad
-                            nuevoInsumo.contacto = [body.contacto]
+                            nuevoInsumo.contacto = [contactoDelInsumo]
                             nuevoInsumo.proyectos = proyectoAux2
-        
-                            nuevoInsumo.save((err,nuevoInsumoDB) => {
+
+                            await nuevoInsumo.save(async (err,nuevoInsumoDB) => {
                                 if(err) {
                                     console.log("Error al generar el insumo", err)
                                     insumosConError.push(insumo)
@@ -277,14 +294,14 @@ exports.addInsumo = function(req,res) {
             insumosAux.nombre = body.nombre
             insumosAux.cantidad = body.cantidad
             insumosAux.unidad = body.unidad
-            insumosAux.contacto = [body.contacto]
+            insumosAux.contacto = [contactoDelInsumo]
 
             Proyecto.findByIdAndUpdate(id,{ $push: {insumos: insumosAux }}, {
                 new: true,
                 runValidators: true,
                 context: 'query',
                 upsert: false
-            } , (err, proyectoDB) => {
+            } , async (err, proyectoDB) => {
                 proyectoDB1 = proyectoDB
                 if(err) {
                     return res.status(400).json({
@@ -299,13 +316,13 @@ exports.addInsumo = function(req,res) {
                 //proyectoAux2._idContacto = proyectoDB.contacto.idContacto
                 proyectoAux2._id = id
                 proyectoAux2.cantidad = body.cantidad
-    
-                 Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, contacto: [body.idContacto]}, { $push: {proyectos: proyectoAux2 }}, {
+
+                Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2, contacto: contactoDelInsumo }}, {
                     new: true,
                     runValidators: true,
                     context: 'query',
                     upsert: false
-                } , (err, insumoDBProyecto) => {
+                } , async (err, insumoDBProyecto) => {
                     if (err) {
                         console.log(err)
                         insumosConError.push(insumo.nombre)
@@ -314,14 +331,14 @@ exports.addInsumo = function(req,res) {
                         let nuevoInsumo = new Insumo()
                         nuevoInsumo.nombre = body.nombre
                         nuevoInsumo.unidad = body.unidad
-                        nuevoInsumo.contacto = [body.contacto]
+                        nuevoInsumo.contacto = [contactoDelInsumo]
                         nuevoInsumo.proyectos = proyectoAux2
-    
-                        nuevoInsumo.save((err,nuevoInsumoDB) => {
+
+                        await nuevoInsumo.save((err,nuevoInsumoDB) => {
                             if(err) {
                                 insumosConError.push(insumo)
                             }
-                        })                        
+                        })
                     } 
                     return res.json({
                         ok: true,
