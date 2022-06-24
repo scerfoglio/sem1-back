@@ -63,7 +63,8 @@ const proyectoSchema = mongoose.Schema({
         unidad: {
             type: String,
             requerid: [true, "Tenés que ingesar una unidad para medir la cantidad (Gramos, Kilos, unidades, etc)"]
-        }
+        },
+        responsable: String
     }],
     contacto:[{
         idContacto: {

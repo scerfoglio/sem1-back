@@ -227,7 +227,7 @@ exports.addInsumo = function(req,res) {
                 if (insumoDB === null) {
                     let proyectoAux2 = {}
                     proyectoAux2.nombre = proyectoDB.nombre
-                    proyectoAux2.emailContacto = proyectoDB.emailContacto
+                    proyectoAux2.emailContacto = body.responsable
                     proyectoAux2._idContacto = body.idContacto
                     proyectoAux2._id = id
                     proyectoAux2.cantidad = body.cantidad
@@ -292,7 +292,7 @@ exports.addInsumo = function(req,res) {
                 }
                 let proyectoAux2 = {}
                 proyectoAux2.nombre = proyectoDB.nombre
-                proyectoAux2.emailContacto = proyectoDB.emailContacto
+                proyectoAux2.emailContacto = body.responsable
                 //proyectoAux2._idContacto = proyectoDB.contacto.idContacto
                 proyectoAux2._id = id
                 proyectoAux2.cantidad = body.cantidad
