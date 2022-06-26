@@ -38,6 +38,13 @@ exports.list = async function(req,res) {
     })
 }
 
+exports.solicitar = function(req,res) {
+    let insumo = req.params.id
+    let body = req.body
+    let cantidad = body.cantidad
+    let proyecto = body.idProyecto
+    let usuario = body.idUsuario
+}
 
 exports.reservar = function(req,res) {
     let idInsumo = req.params.id
