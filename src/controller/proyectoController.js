@@ -290,6 +290,13 @@ exports.addInsumo = function(req,res) {
                         err: err
                     })
                 }
+                if(proyectoDB === null) {
+                    return res.status(404).json({
+                        ok: false,
+                        message: "No se encontró el proyecto al que se le quiere agregar insumos",
+                        err: "Verificar el proyecto con id" + id 
+                    })
+                }
                 let proyectoAux2 = {}
                 proyectoAux2.nombre = proyectoDB.nombre
                 proyectoAux2.emailContacto = body.responsable

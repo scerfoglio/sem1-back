@@ -30,8 +30,11 @@ const InsumosSchema = mongoose.Schema({
         _idContacto: mongoose.Schema.ObjectId,
         emailContacto: String,
         pendiente: {
+            _id: mongoose.Schema.ObjectId,
             cantidad: Number,
-            solicitado: Boolean
+            solicitado: Boolean, 
+            aceptado: Boolean,
+            solicitante: String
         }
     }] 
 })
