@@ -53,8 +53,8 @@ exports.reservar = function(req,res) {
     let idProyecto = body.idProyecto
     let cantidad = body.cantidad
     let solicitante = body.solicitante
-   // Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": true }]}}},
-   Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": false }]}}},
+    Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": true }]}}},
+   //Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": false }]}}},
         (err,insumoDB) => {
             if (err) {
                 return (
@@ -90,15 +90,13 @@ exports.reservar = function(req,res) {
                         )
                     }
                     else {
-                        console.log("este es el insumo a matchear", insumoAgregado.nombre)
-                        Proyecto.findOneAndUpdate({_id: idProyecto, insumos: { $elemMatch: { nombre: insumoAgregado.nombre}}}, { $set: {"insumos.$.pendiente": pendiente}, $inc: {"insumos.$.cantidad": -cantidad}},
+                        Proyecto.findOneAndUpdate({_id: idProyecto, insumos: { $elemMatch: { nombre: insumoAgregado.nombre}}}, { $set: {"insumos.$.pendiente": pendiente} /*, $inc: {"insumos.$.cantidad": -cantidad}*/},
                         {
                             new: true,
                             runValidators: true,
                             context: 'query',
                             upsert: false
                         },  (err,insumoAgregadoAProyecto) => {
-                            console.log("Insumo agregado",insumoAgregadoAProyecto.nombre)
                             if (err) {
                                 return (
                                     res.status(400).json({
@@ -110,7 +108,6 @@ exports.reservar = function(req,res) {
                     
                                 )
                             }
-
                             return (
                                 res.json({
                                     ok: true,
@@ -118,16 +115,6 @@ exports.reservar = function(req,res) {
                                 })
                             )
                         }) 
-
-
-
-
-                        // return (
-                        //     res.json({
-                        //         ok: true,
-                        //         insumo: insumoAgregado
-                        //     })
-                        // )
                     }
                 })
             }
@@ -143,3 +130,143 @@ exports.reservar = function(req,res) {
     
 }
 
+exports.aceptar = function(req, res) {
+    let idInsumo = req.params.id
+    let idProyecto = req.body.idProyecto
+    let idSolicitud = req.body.idSolicitud
+    Insumo.findOne({_id: idInsumo, proyectos: { $elemMatch: {_id: idProyecto, "pendiente.$._id": idSolicitud}}},
+        (err,insumoDB) => {
+            if (err) {
+                return (
+                    res.status(400).json({
+                        ok: false,
+                        message: err.message,
+                        err: err
+                    })
+                )
+            }
+            if (!insumoDB ) {
+                return res.status(404).json({
+                    ok: false,
+                    message: "No se encontró el proyecto buscado",
+                    err: "Verificar el proyecto con id" + id 
+                })
+            }
+            let proyecto = insumoDB.proyectos.find(proyecto => proyecto._id = idProyecto) 
+            Insumo.findOneAndUpdate({_id: idInsumo, proyectos: { $elemMatch: {_id: idProyecto, "pendiente.$._id": idSolicitud}}}, { $set: {"proyectos.$.pendiente.aceptado": true, "proyectos.$.pendiente.solicitado": false}/*,  $inc: {"proyectos.$.cantidad": -proyecto.pendiente.cantidad}*/}, 
+            {
+                new: true,
+                runValidators: true,
+                context: 'query',
+                upsert: false
+            }, (err,insumoAgregado) => {
+                if (err) {
+                    return (
+                        res.status(400).json({
+                            ok: false,
+                            message: err.message,
+                            err: err
+                        })
+        
+                    )
+                }
+                Proyecto.findOneAndUpdate({_id: idProyecto, insumos: { $elemMatch: { nombre: insumoAgregado.nombre}}}, { $set: {"insumos.$.pendiente.aceptado": true, "insumos.$.pendiente.solicitado": false} , $inc: {"insumos.$.cantidad": -proyecto.pendiente.cantidad}},
+                        {
+                            new: true,
+                            runValidators: true,
+                            context: 'query',
+                            upsert: false
+                        },  (err,insumoAgregadoAProyecto) => {
+                            if (err) {
+                                return (
+                                    res.status(400).json({
+                                        ok: false,
+                                        message: err.message,
+                                        err: err,
+                                        message2: "Considerar hacer el rollback de la reserva del insumo"
+                                    })
+                    
+                                )
+                            }
+                            return (
+                                res.json({
+                                    ok: true,
+                                    insumo: insumoAgregado
+                                })
+                            )
+                        }) 
+            })
+        }
+    )
+}
+
+exports.rechazar = function(req, res) {
+    let idInsumo = req.params.id
+    let idProyecto = req.body.idProyecto
+    let idSolicitud = req.body.idSolicitud
+    Insumo.findOne({_id: idInsumo, proyectos: { $elemMatch: {_id: idProyecto, "pendiente.$._id": idSolicitud}}},
+        (err,insumoDB) => {
+            if (err) {
+                return (
+                    res.status(400).json({
+                        ok: false,
+                        message: err.message,
+                        err: err
+                    })
+                )
+            }
+            if (!insumoDB ) {
+                return res.status(404).json({
+                    ok: false,
+                    message: "No se encontró el proyecto buscado",
+                    err: "Verificar el proyecto con id" + id 
+                })
+            }
+            let proyecto = insumoDB.proyectos.find(proyecto => proyecto._id = idProyecto) 
+            Insumo.findOneAndUpdate({_id: idInsumo, proyectos: { $elemMatch: {_id: idProyecto, "pendiente.$._id": idSolicitud}}}, { $set: {"proyectos.$.pendiente.aceptado": false, "proyectos.$.pendiente.solicitado": false},  $inc: {"proyectos.$.cantidad": proyecto.pendiente.cantidad}}, 
+            {
+                new: true,
+                runValidators: true,
+                context: 'query',
+                upsert: false
+            }, (err,insumoAgregado) => {
+                if (err) {
+                    return (
+                        res.status(400).json({
+                            ok: false,
+                            message: err.message,
+                            err: err
+                        })
+        
+                    )
+                }
+                Proyecto.findOneAndUpdate({_id: idProyecto, insumos: { $elemMatch: { nombre: insumoAgregado.nombre}}}, { $unset: {"insumos.$.pendiente": ""}},
+                        {
+                            new: true,
+                            runValidators: true,
+                            context: 'query',
+                            upsert: false
+                        },  (err,insumoAgregadoAProyecto) => {
+                            if (err) {
+                                return (
+                                    res.status(400).json({
+                                        ok: false,
+                                        message: err.message,
+                                        err: err,
+                                        message2: "Considerar hacer el rollback de la reserva del insumo"
+                                    })
+                    
+                                )
+                            }
+                            return (
+                                res.json({
+                                    ok: true,
+                                    insumo: insumoAgregado
+                                })
+                            )
+                        }) 
+            })
+        }
+    )
+    
+}

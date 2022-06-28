@@ -1,0 +1,9 @@
+URL: 
+http://localhost:3000/api/insumo/[id_insumo]/reservar
+
+{
+    "idProyecto": "62b7ead65f481bb41c2aaa3c",
+    "cantidad": 56,
+    "aceptado": false,
+    "solicitante": "santi.nocerfoglio@gmail.com"
+}
