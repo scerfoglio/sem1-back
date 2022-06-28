@@ -1,5 +1,6 @@
 const Insumo = require('../models/insumoModel')
-
+const Proyecto = require('../models/proyectoModel')
+const ObjectoId = require('mongoose');
 
 exports.add = function(req,res) {
 
@@ -51,7 +52,9 @@ exports.reservar = function(req,res) {
     let body = req.body
     let idProyecto = body.idProyecto
     let cantidad = body.cantidad
-    Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, "pendiente.solicitado": true}}},
+    let solicitante = body.solicitante
+   // Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": true }]}}},
+   Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": false }]}}},
         (err,insumoDB) => {
             if (err) {
                 return (
@@ -66,7 +69,10 @@ exports.reservar = function(req,res) {
                 let pendiente = {}
                 pendiente.solicitado = true
                 pendiente.cantidad = cantidad
-                Insumo.findOneAndUpdate({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto}}}, { $set: {"proyectos.$.pendiente": pendiente}},
+                pendiente.aceptado = false
+                pendiente.solicitante = solicitante
+                pendiente._id = new ObjectoId.Types.ObjectId()
+                Insumo.findOneAndUpdate({_id: idInsumo, proyectos: { $elemMatch: {_id: idProyecto}}}, { $set: {"proyectos.$.pendiente": pendiente}, $inc: {"proyectos.$.cantidad": -cantidad}},
                 {
                     new: true,
                     runValidators: true,
@@ -84,37 +90,55 @@ exports.reservar = function(req,res) {
                         )
                     }
                     else {
-                        return (
-                            res.json({
-                                ok: true,
-                                insumo: insumoAgregado
-                            })
-                        )
+                        console.log("este es el insumo a matchear", insumoAgregado.nombre)
+                        Proyecto.findOneAndUpdate({_id: idProyecto, insumos: { $elemMatch: { nombre: insumoAgregado.nombre}}}, { $set: {"insumos.$.pendiente": pendiente}, $inc: {"insumos.$.cantidad": -cantidad}},
+                        {
+                            new: true,
+                            runValidators: true,
+                            context: 'query',
+                            upsert: false
+                        },  (err,insumoAgregadoAProyecto) => {
+                            console.log("Insumo agregado",insumoAgregadoAProyecto.nombre)
+                            if (err) {
+                                return (
+                                    res.status(400).json({
+                                        ok: false,
+                                        message: err.message,
+                                        err: err,
+                                        message2: "Considerar hacer el rollback de la reserva del insumo"
+                                    })
+                    
+                                )
+                            }
+
+                            return (
+                                res.json({
+                                    ok: true,
+                                    insumo: insumoAgregado
+                                })
+                            )
+                        }) 
+
+
+
+
+                        // return (
+                        //     res.json({
+                        //         ok: true,
+                        //         insumo: insumoAgregado
+                        //     })
+                        // )
                     }
                 })
-
-
-                // return (
-                //     res.status(409).json({
-                //         ok: true,
-                //         insumo: insumoDB
-                //     })
-                // )
             }
             else {
                 return (
                     res.status(409).json({
                         ok: false,
-                        message: "El insumo ya tiene una solicitud pendiente y no puede ser solicitado nuevamente hasta que se cancele la solicitud actual"
+                        message: "El insumo ya tiene una solicitud pendiente o no cumple con la cantidad solicitada en stock y no puede solicitarse en este momento"
                     })
                 )               
             }
-
-    
-            // res.json({
-            //     ok: true,
-            //     proyecto: proyectoDB
-            // })
        })
     
 }
