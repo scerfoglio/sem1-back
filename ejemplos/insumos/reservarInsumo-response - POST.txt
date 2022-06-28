@@ -1,0 +1,25 @@
+{
+    "ok": true,
+    "insumo": {
+        "_id": "62b7ead65f481bb41c2aaa45",
+        "contacto": [],
+        "proyectos": [
+            {
+                "pendiente": {
+                    "solicitado": true,
+                    "cantidad": 56,
+                    "aceptado": false,
+                    "solicitante": "santi.nocerfoglio@gmail.com",
+                    "_id": "62ba48aa1cf82363a1d63f6f"
+                },
+                "_id": "62b7ead65f481bb41c2aaa3c",
+                "nombre": "Cristian Merenda",
+                "cantidad": 498610,
+                "emailContacto": "cristian.merenda@gmail.com"
+            }
+        ],
+        "nombre": "bbbbb",
+        "unidad": "L",
+        "__v": 0
+    }
+}
