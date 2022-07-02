@@ -278,7 +278,8 @@ exports.addInsumo = function(req,res) {
             insumosAux.nombre = body.nombre
             insumosAux.cantidad = body.cantidad
             insumosAux.unidad = body.unidad
-            insumosAux._id = new ObjectoId.Types.ObjectId()
+            insumosAux._id = new ObjectoId.Types.ObjectId(),
+            insumosAux.responsable = body.idContacto
 
             Proyecto.findByIdAndUpdate(id,{ $push: {insumos: insumosAux }}, {
                 new: true,
@@ -303,7 +304,7 @@ exports.addInsumo = function(req,res) {
                 }
                 let proyectoAux2 = {}
                 proyectoAux2.nombre = proyectoDB.nombre
-                proyectoAux2.emailContacto = body.responsable
+                proyectoAux2.emailContacto = body.idContacto
                 //proyectoAux2._idContacto = proyectoDB.contacto.idContacto
                 proyectoAux2._id = id
                 proyectoAux2.cantidad = body.cantidad
