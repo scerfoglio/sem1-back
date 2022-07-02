@@ -275,6 +275,7 @@ exports.addInsumo = function(req,res) {
             insumosAux.nombre = body.nombre
             insumosAux.cantidad = body.cantidad
             insumosAux.unidad = body.unidad
+            insumoAux._id = new ObjectoId.Types.ObjectId()
 
             Proyecto.findByIdAndUpdate(id,{ $push: {insumos: insumosAux }}, {
                 new: true,
@@ -319,6 +320,7 @@ exports.addInsumo = function(req,res) {
                         nuevoInsumo.nombre = body.nombre
                         nuevoInsumo.unidad = body.unidad
                         nuevoInsumo.proyectos = proyectoAux2
+                        nuevoInsumo._id = insumoAux._id
     
                         nuevoInsumo.save((err,nuevoInsumoDB) => {
                             if(err) {
