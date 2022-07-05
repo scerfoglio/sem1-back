@@ -129,7 +129,7 @@ exports.reservar = function(req,res) {
        })
     
 }
-
+ 
 exports.aceptar = function(req, res) {
     let idInsumo = req.params.id
     let idProyecto = req.body.idProyecto
