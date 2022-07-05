@@ -3,8 +3,10 @@ const proyectoController = require('../controller/proyectoController')
 
 
 
-// Usuarios
 
+
+router.route('/proyecto/:id/disponibilizar')
+    .post(proyectoController.disponibilizar)
 
 router.route('/proyecto/:id/usuario/:idUsuario')
     .patch(proyectoController.updateUsuario)

@@ -36,7 +36,8 @@ exports.add = function(req,res) {
 
         let proyectoDBAux = proyectoDB
         body.insumos.forEach((insumo) => {
-            Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": insumo.cantidad }}, {
+            //Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": insumo.cantidad }}, {
+                Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": 0 }}, {
                 new: true,
                 runValidators: true,
                 context: 'query',
@@ -53,7 +54,8 @@ exports.add = function(req,res) {
                     proyectoAux2.emailContacto = proyectoDBAux.emailContacto
                     proyectoAux2._idContacto = proyectoDBAux._idContacto
                     proyectoAux2._id = proyectoDBAux._id
-                    proyectoAux2.cantidad = insumo.cantidad
+                    //proyectoAux2.cantidad = insumo.cantidad
+                    proyectoAux2.cantidad = 0
 
                     let proyectoArray = []
                     proyectoArray.push(proyectoAux2)
@@ -214,7 +216,8 @@ exports.addInsumo = function(req,res) {
         }
         if (proyectoDB != null) {
             proyectoDB1 = proyectoDB
-            Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
+            //Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": body.cantidad }}, {
+                Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad, proyectos: { $elemMatch: {nombre: proyectoDB.nombre}}}, { $inc: {"proyectos.$.cantidad": 0 }}, {
                 new: true,
                 runValidators: true,
                 context: 'query',
@@ -230,7 +233,8 @@ exports.addInsumo = function(req,res) {
                     proyectoAux2.emailContacto = body.responsable
                     proyectoAux2._idContacto = body.idContacto
                     proyectoAux2._id = id
-                    proyectoAux2.cantidad = body.cantidad
+                    //proyectoAux2.cantidad = body.cantidad
+                    proyectoAux2.cantidad = 0
         
                     Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
                         new: true,
@@ -307,7 +311,8 @@ exports.addInsumo = function(req,res) {
                 proyectoAux2.emailContacto = body.idContacto
                 //proyectoAux2._idContacto = proyectoDB.contacto.idContacto
                 proyectoAux2._id = id
-                proyectoAux2.cantidad = body.cantidad
+                //proyectoAux2.cantidad = body.cantidad
+                proyectoAux2.cantidad = 0
     
                  Insumo.findOneAndUpdate({nombre: body.nombre, unidad: body.unidad}, { $push: {proyectos: proyectoAux2 }}, {
                     new: true,
@@ -344,7 +349,48 @@ exports.addInsumo = function(req,res) {
     })
 }
 
+exports.disponibilizar = function(req,res) {
+    const id_proyecto = req.params.id
+    const id_insumo = req.body.id_insumo
+    const cantidad = req.body.cantidad
+    const filter =`{id_: '${id_insumo}', proyectos: { $elemMatch: {_id: '${id_proyecto}}}}`
+    console.log(filter)
+    Insumo.findOneAndUpdate({_id: id_insumo, proyectos: { $elemMatch: {_id: id_proyecto}}}, { $inc: {"proyectos.$.cantidad": cantidad }}, {
+        new: true,
+        runValidators: true,
+        context: 'query',
+        upsert: false
+    } , (err, insumoDB) => {        
+        if (err) {
+            return res.json({
+                ok: false,
+                err: err
+            })
+        }
+        console.log(insumoDB)
+        if (insumoDB === null) {
+            return res.json({
+                ok: true,
+                err: {
+                    err_code: '0001',
+                    err_msj: 'Base de datos inconsistente con el insumo',
+                    id_insumo: id_insumo,
+                    id_proyecto: id_proyecto
+                }
+                
+            })
+        }
+        else {
+            return res.json({
+                ok: true,
+                insumo: insumoDB
+            })
+        } 
+    })
 
+
+ 
+}
 
 exports.getOne = function(req,res) {
     const id = req.params.id

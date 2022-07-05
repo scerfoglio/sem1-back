@@ -2,8 +2,6 @@ const router = require('express').Router();
 const insumosController = require('../controller/insumoController')
 
 
-
-
 router.route('/insumo/:id/reservar')
     .post(insumosController.reservar)
 

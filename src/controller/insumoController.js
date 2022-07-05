@@ -53,8 +53,8 @@ exports.reservar = function(req,res) {
     let idProyecto = body.idProyecto
     let cantidad = body.cantidad
     let solicitante = body.solicitante
-    Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": true }]}}},
-   //Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": false }]}}},
+    Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lt: cantidad} } , { "pendiente.solicitado": true }]}}},
+    //Insumo.findOne({_id: idInsumo, proyectos: {$elemMatch: {_id: idProyecto, $or: [ { cantidad: {$lte: cantidad} } , { "pendiente.solicitado": false }]}}},
         (err,insumoDB) => {
             if (err) {
                 return (
