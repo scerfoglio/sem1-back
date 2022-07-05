@@ -23,7 +23,7 @@ exports.add = function(req,res) {
         emailContacto: body.emailContacto,
         contacto: body.contacto
     })
-
+ 
     proyecto.save((err,proyectoDB) => {
         let insumosConError = []
         if(err) {
@@ -33,73 +33,75 @@ exports.add = function(req,res) {
                 err: err
             })
         }
+        if (body.insumos) {
+            let proyectoDBAux = proyectoDB
+            body.insumos.forEach((insumo) => {
+                //Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": insumo.cantidad }}, {
+                    Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": 0 }}, {
+                    new: true,
+                    runValidators: true,
+                    context: 'query',
+                    upsert: false
+                } , (err, insumoDB) => {        
+                    if (err) {
+                        insumosConError.push(insumo.nombre)
+                    }
 
-        let proyectoDBAux = proyectoDB
-        body.insumos.forEach((insumo) => {
-            //Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": insumo.cantidad }}, {
-                Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad, "proyectos.nombre": proyectoDBAux.nombre}, { $inc: {"proyectos.$.cantidad": 0 }}, {
-                new: true,
-                runValidators: true,
-                context: 'query',
-                upsert: false
-            } , (err, insumoDB) => {        
-                if (err) {
-                    insumosConError.push(insumo.nombre)
-                }
+                    if (insumoDB == null ) {
 
-                if (insumoDB == null ) {
+                        let proyectoAux2 =  {}
+                        proyectoAux2.nombre = proyectoDBAux.nombre
+                        proyectoAux2.emailContacto = proyectoDBAux.emailContacto
+                        proyectoAux2._idContacto = proyectoDBAux._idContacto
+                        proyectoAux2._id = proyectoDBAux._id
+                        //proyectoAux2.cantidad = insumo.cantidad
+                        proyectoAux2.cantidad = 0
 
-                    let proyectoAux2 =  {}
-                    proyectoAux2.nombre = proyectoDBAux.nombre
-                    proyectoAux2.emailContacto = proyectoDBAux.emailContacto
-                    proyectoAux2._idContacto = proyectoDBAux._idContacto
-                    proyectoAux2._id = proyectoDBAux._id
-                    //proyectoAux2.cantidad = insumo.cantidad
-                    proyectoAux2.cantidad = 0
+                        let proyectoArray = []
+                        proyectoArray.push(proyectoAux2)
 
-                    let proyectoArray = []
-                    proyectoArray.push(proyectoAux2)
+                        Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad}, { $push: {proyectos: proyectoArray }}, {
+                            new: true,
+                            runValidators: true,
+                            context: 'query',
+                            upsert: false
+                        } , (err, insumoDBProyecto) => {        
+                            if (err) {
+                                console.log(err)
+                                insumosConError.push(insumo.nombre)
+                            }
+                            console.log("insumoDBProyecto", insumoDBProyecto)
+                            if (insumoDBProyecto === null) {
+                                console.log("Generando nuevo insumo")
+                                
 
-                    Insumo.findOneAndUpdate({nombre: insumo.nombre, unidad: insumo.unidad}, { $push: {proyectos: proyectoArray }}, {
-                        new: true,
-                        runValidators: true,
-                        context: 'query',
-                        upsert: false
-                    } , (err, insumoDBProyecto) => {        
-                        if (err) {
-                            console.log(err)
-                            insumosConError.push(insumo.nombre)
-                        }
-                        console.log("insumoDBProyecto", insumoDBProyecto)
-                        if (insumoDBProyecto === null) {
-                            console.log("Generando nuevo insumo")
+                                
+                                // let insumoGenerado = crearInsumo(insumo,proyectoAux2)
+                                // if (insumoGenerado.err === '') {
+                                //     insumosConError.push(insumo)
+                                // }
+                                
+                                let nuevoInsumo = new Insumo()
+                                nuevoInsumo.nombre = insumo.nombre
+                                nuevoInsumo.unidad = insumo.unidad
+                                nuevoInsumo.proyectos = proyectoAux2
+            
+                                nuevoInsumo.save((err,nuevoInsumoDB) => {
+                                    if(err) {
+                                        console.log("Error al generar el insumo", err)
+                                        insumosConError.push(insumo)
+                                    }
+                                })
+                                
+                            }
                             
-
-                            
-                            // let insumoGenerado = crearInsumo(insumo,proyectoAux2)
-                            // if (insumoGenerado.err === '') {
-                            //     insumosConError.push(insumo)
-                            // }
-                            
-                            let nuevoInsumo = new Insumo()
-                            nuevoInsumo.nombre = insumo.nombre
-                            nuevoInsumo.unidad = insumo.unidad
-                            nuevoInsumo.proyectos = proyectoAux2
+                        })
+                    }
+                })
+            }
         
-                            nuevoInsumo.save((err,nuevoInsumoDB) => {
-                                if(err) {
-                                    console.log("Error al generar el insumo", err)
-                                    insumosConError.push(insumo)
-                                }
-                            })
-                            
-                        }
-                        
-                    })
-                }
-            })
-        })
-         
+        )
+        }
         res.json({
             ok:true,
             proyecto: proyectoDB
