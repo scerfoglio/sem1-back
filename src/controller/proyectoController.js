@@ -3,6 +3,7 @@ const Insumo = require('../models/insumoModel')
 const { json } = require('express/lib/response')
 const { Mongoose } = require('mongoose')
 const ObjectoId = require('mongoose');
+const mailer = require('../mailer/email')
 
 
 exports.add = function(req,res) {
@@ -426,6 +427,7 @@ exports.getOne = function(req,res) {
 }
 
 exports.list = async function(req,res) {
+
     const normalFilterFields = ['area', 'campo_accion'];
     const regexFilterFields = ['descripcion'];
     const filters = {};

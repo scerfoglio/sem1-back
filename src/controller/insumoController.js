@@ -1,6 +1,7 @@
 const Insumo = require('../models/insumoModel')
 const Proyecto = require('../models/proyectoModel')
 const ObjectoId = require('mongoose');
+const mailer = require('../mailer/email')
 
 exports.add = function(req,res) {
 
@@ -108,6 +109,12 @@ exports.reservar = function(req,res) {
                     
                                 )
                             }
+                            let proyectoAsociado = insumoAgregado.proyectos.find(proyecto => proyecto._id = idProyecto) 
+                            mailer.sendEmail(
+                                ` Solicitante: ${proyectoAsociado.pendiente.solicitante} \n Insumo: ${insumoAgregado.nombre}\n Cantidad: ${proyectoAsociado.pendiente.cantidad} ${insumoAgregado.unidad}\n Podés ponerte en contacto con él desde la sección de chats de la aplicación`,
+                                'Nueva solicitud de reserva de insumo',
+                                proyectoAsociado.emailContacto
+                            )
                             return (
                                 res.json({
                                     ok: true,
@@ -188,6 +195,12 @@ exports.aceptar = function(req, res) {
                     
                                 )
                             }
+                            let proyectoAsociado = insumoAgregado.proyectos.find(proyecto => proyecto._id = idProyecto)    
+                            mailer.sendEmail(
+                                ` Responsable del insumo: ${proyectoAsociado.emailContacto} \n Insumo: ${insumoAgregado.nombre}\n Cantidad: ${proyectoAsociado.pendiente.cantidad} ${insumoAgregado.unidad}\n Podés ponerte en contacto con él desde la sección de chats de la aplicación para coordinar la entrega del insumo`,
+                                'Solicitud de reserva de insumo CONFIRMADA',
+                                proyectoAsociado.pendiente.solicitante
+                            )
                             return (
                                 res.json({
                                     ok: true,
@@ -258,6 +271,12 @@ exports.rechazar = function(req, res) {
                     
                                 )
                             }
+                            let proyectoAsociado = insumoAgregado.proyectos.find(proyecto => proyecto._id = idProyecto)    
+                            mailer.sendEmail(
+                                ` Responsable del insumo: ${proyectoAsociado.emailContacto} \n Insumo: ${insumoAgregado.nombre}\n Cantidad: ${proyectoAsociado.pendiente.cantidad} ${insumoAgregado.unidad}\n La solicitud de la reservada generada fue rechazada por el administrador del proyecto`,
+                                'Solicitud de reserva de insumo RECHAZADA',
+                                proyectoAsociado.pendiente.solicitante
+                            )
                             return (
                                 res.json({
                                     ok: true,
