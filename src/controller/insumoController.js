@@ -227,11 +227,12 @@ exports.rechazar = function(req, res) {
                         err: err
                     })
                 )
-            }
+            }   
+            console.log("Este es el proyecto buscado", `\nId de Insumo: ${idInsumo}\n Id de Proyecto: ${idProyecto}\n Id de Solicitud: ${idSolicitud}`)
             if (!insumoDB ) {
                 return res.status(404).json({
                     ok: false,
-                    message: "No se encontró el proyecto o el insumo buscado",
+                    message: "No se encontró el proyecto o el insumo buscado, o no exite una solicitud pendiente.",
                     err: `Verificar el proyecto con id ${idProyecto} o el insumo con id ${idInsumo}` 
                 })
             }
