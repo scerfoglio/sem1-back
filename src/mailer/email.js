@@ -1,7 +1,6 @@
 var nodemailer = require('nodemailer')
 
 exports.sendEmail = function(contenidoMail, asunto, destinatorio) {
-    console.log("entrando a enviar mail)")
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {

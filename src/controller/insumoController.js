@@ -155,8 +155,8 @@ exports.aceptar = function(req, res) {
             if (!insumoDB ) {
                 return res.status(404).json({
                     ok: false,
-                    message: "No se encontró el proyecto buscado",
-                    err: "Verificar el proyecto con id" + id 
+                    message: "No se encontró el proyecto o el insumo buscado",
+                    err: `Verificar el proyecto con id ${idProyecto} o el insumo con id ${idInsumo}` 
                 })
             }
             let proyecto = insumoDB.proyectos.find(proyecto => proyecto._id = idProyecto) 
